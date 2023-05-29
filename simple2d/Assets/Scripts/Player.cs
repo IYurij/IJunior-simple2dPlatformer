@@ -17,6 +17,8 @@ public class Player : MonoBehaviour
     private PlayerMovement _playerMovieComponent;
     private Animator _playerAnimator;
 
+    private readonly int _kickParameterHash = Animator.StringToHash("Kick");
+
     private void Awake()
     {
         _sprite = GetComponent<SpriteRenderer>();
@@ -46,7 +48,7 @@ public class Player : MonoBehaviour
     {
         if (collision.TryGetComponent<Enemy>(out Enemy enemy))
         {
-            _playerAnimator.SetTrigger("Kick");
+            _playerAnimator.SetTrigger(_kickParameterHash);
 
             _isKicked = true;
             _playerMovieComponent.enabled = false;

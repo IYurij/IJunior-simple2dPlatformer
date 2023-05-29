@@ -3,6 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(SpriteRenderer))]
+[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(Animator))]
 public class PlayerMovement : MonoBehaviour
 {
     private const float _minMoveDistance = 0.001f;
@@ -23,6 +26,9 @@ public class PlayerMovement : MonoBehaviour
     private RaycastHit2D[] _hitBuffer = new RaycastHit2D[16];
     private List<RaycastHit2D> _hitBufferList = new List<RaycastHit2D>(16);
     private bool _grounded;
+
+    private readonly int _parameterSpeedHash = Animator.StringToHash("Speed");
+    private readonly int _parameterJumpHash = Animator.StringToHash("Jump");
 
     private void OnEnable()
     {
@@ -54,18 +60,18 @@ public class PlayerMovement : MonoBehaviour
 
         if (_targetVelocity.x != 0)
         {
-            _animator.SetFloat("Speed", Math.Abs(_targetVelocity.x));
+            _animator.SetFloat(_parameterSpeedHash, Math.Abs(_targetVelocity.x));
         }
         else
         {
-            _animator.SetFloat("Speed", 0);
+            _animator.SetFloat(_parameterSpeedHash, 0);
         }
 
         if (Input.GetKey(KeyCode.Space) && _grounded)
         {
             Velocity.y = 5;
 
-            _animator.SetTrigger("Jump");
+            _animator.SetTrigger(_parameterJumpHash);
         }
     }
 

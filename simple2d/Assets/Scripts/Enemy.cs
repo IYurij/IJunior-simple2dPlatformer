@@ -10,15 +10,18 @@ public class Enemy : MonoBehaviour
     private Animator _animator;
     private int _kickDirection;
 
+    private readonly int _attackParameterHash = Animator.StringToHash("EnemyAttack");
+
     private void Awake()
     {
         _animator = GetComponent<Animator>();
     }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.TryGetComponent<Player>(out Player player))
         {
-            _animator.Play("EnemyAttack");
+            _animator.Play(_attackParameterHash);
 
             _kickDirection = player.transform.position.x > transform.position.x ? 1 : -1;
 
