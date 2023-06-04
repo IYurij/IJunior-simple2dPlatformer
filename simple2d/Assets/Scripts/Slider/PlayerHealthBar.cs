@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Slider))]
 public class PlayerHealthBar : MonoBehaviour
 {
+    [SerializeField] private Health _player;
     [SerializeField] private int _maxHealth = 100;
     [SerializeField] private int _minHealth = 0;
 
@@ -14,6 +16,8 @@ public class PlayerHealthBar : MonoBehaviour
 
     public float CurrentHealth => _healthBar.value;
 
+    
+
     private void Awake()
     {
         _healthBar = gameObject.GetComponent<Slider>();
@@ -21,7 +25,17 @@ public class PlayerHealthBar : MonoBehaviour
         _healthBar.minValue = _minHealth;
     }
 
-    public void ChangeHealth(float targetValue)
+    private void OnEnable()
+    {
+        _player.HealthChanged += ChangeHealth;
+    }
+
+    private void OnDisable()
+    {
+        _player.HealthChanged -= ChangeHealth;
+    }
+
+    private void ChangeHealth(float targetValue)
     {
         if (!isActive)
         {

@@ -1,76 +1,50 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class Health : MonoBehaviour
 {
-    [SerializeField] private float _healthStep = 10f;
+    [SerializeField] private float _healthStep = 10;
+    [SerializeField] private PlayerHealthBar _healthBar;
 
-    private PlayerHealthBar _healthBar;
+    public event UnityAction<float> HealthChanged;
+
     private float _targetHealth;
     private float _currentHealth;
-    private bool _isIncrease;
     private float _maxValue;
     private float _minValue;
-
-    private void Awake()
-    {
-        _healthBar = FindObjectOfType<PlayerHealthBar>();
-    }
+    private Slider _slider;
 
     private void Start()
     {
-        _maxValue = _healthBar.GetComponent<Slider>().maxValue;
-        _minValue = _healthBar.GetComponent<Slider>().minValue;
+        _slider = _healthBar.GetComponent<Slider>();
+        _maxValue = _slider.maxValue;
+        _minValue = _slider.minValue;
     }
 
-    public void IncreaseHealthOnClick()
-    {
-        _isIncrease = true;
-
-        PrepareTargetHealth();
-
-        _healthBar.ChangeHealth(_targetHealth);
-    }
-
-    public void DecreaseHealthOnClick()
-    {
-        _isIncrease = false;
-
-        PrepareTargetHealth();
-
-        _healthBar.ChangeHealth(_targetHealth);
-    }
-
-    private void PrepareTargetHealth()
+    public void Heal()
     {
         _currentHealth = _healthBar.CurrentHealth;
 
-        if (_currentHealth >= _minValue && _currentHealth <= _maxValue)
+        if (_currentHealth + _healthStep <= _maxValue)
         {
-            if (_isIncrease == true)
-            {
-                if (_currentHealth + _healthStep >= _maxValue)
-                {
-                    _targetHealth = _maxValue;
+            _targetHealth = _currentHealth + _healthStep;
 
-                    return;
-                }
+            HealthChanged?.Invoke(_targetHealth);
+        }
+    }
 
-                _targetHealth = _currentHealth + _healthStep;
-            }
-            else
-            {
-                if (_currentHealth - _healthStep <= _minValue)
-                {
-                    _targetHealth = _minValue;
+    public void Damage()
+    {
+        _currentHealth = _healthBar.CurrentHealth;
+        
+        if (_currentHealth - _healthStep >= _minValue)
+        {
+            _targetHealth = _currentHealth - _healthStep;
 
-                    return;
-                }
-
-                _targetHealth = _currentHealth - _healthStep;
-            }
+            HealthChanged?.Invoke(_targetHealth);
         }
     }
 }
