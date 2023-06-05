@@ -11,10 +11,11 @@ public class PlayerHealthBar : MonoBehaviour
 
     private Slider _healthBar;
     private bool _isActive;
+    private float _barStepMovie = 0.1f;
 
     private void Awake()
     {
-        _healthBar = gameObject.GetComponent<Slider>();
+        _healthBar = GetComponent<Slider>();
         _healthBar.maxValue = _player.MaxHealth;
         _healthBar.minValue = _player.MinHealth;
     }
@@ -41,9 +42,9 @@ public class PlayerHealthBar : MonoBehaviour
     {
         _isActive = true;
 
-        while (Mathf.Abs(_healthBar.value - targetValue) > 0)
+        while (_healthBar.value != targetValue)
         {
-            _healthBar.value = Mathf.MoveTowards(_healthBar.value, targetValue, 0.1f);
+            _healthBar.value = Mathf.MoveTowards(_healthBar.value, targetValue, _barStepMovie);
 
             yield return null;
         }
