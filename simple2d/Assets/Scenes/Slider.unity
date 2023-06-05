@@ -360,8 +360,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 350737241}
-        m_TargetAssemblyTypeName: HealthController, Assembly-CSharp
-        m_MethodName: DecreaseHealthOnClick
+        m_TargetAssemblyTypeName: Health, Assembly-CSharp
+        m_MethodName: Damage
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -574,9 +574,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18e66d349c91ce0409ab313d1f98b204, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxHealth: 100
-  _minHealth: 0
   _healthStep: 10
+  _healthBar: {fileID: 973928895}
 --- !u!114 &350737242
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -940,7 +939,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 0.485
+  m_Value: 0
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -956,6 +955,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1633cfff524c54d43bcbe1440277d3a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _player: {fileID: 350737241}
+  _maxHealth: 100
+  _minHealth: 0
 --- !u!1 &996279487
 GameObject:
   m_ObjectHideFlags: 0
@@ -1296,8 +1298,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 350737241}
-        m_TargetAssemblyTypeName: HealthController, Assembly-CSharp
-        m_MethodName: IncreaseHealthOnClick
+        m_TargetAssemblyTypeName: Health, Assembly-CSharp
+        m_MethodName: Heal
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

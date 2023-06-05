@@ -8,21 +8,15 @@ using UnityEngine.UI;
 public class PlayerHealthBar : MonoBehaviour
 {
     [SerializeField] private Health _player;
-    [SerializeField] private int _maxHealth = 100;
-    [SerializeField] private int _minHealth = 0;
 
     private Slider _healthBar;
-    private bool isActive;
-
-    public float CurrentHealth => _healthBar.value;
-
-    
+    private bool _isActive;
 
     private void Awake()
     {
         _healthBar = gameObject.GetComponent<Slider>();
-        _healthBar.maxValue = _maxHealth;
-        _healthBar.minValue = _minHealth;
+        _healthBar.maxValue = _player.MaxHealth;
+        _healthBar.minValue = _player.MinHealth;
     }
 
     private void OnEnable()
@@ -37,7 +31,7 @@ public class PlayerHealthBar : MonoBehaviour
 
     private void ChangeHealth(float targetValue)
     {
-        if (!isActive)
+        if (!_isActive)
         {
             StartCoroutine(ChangeHealthCoroutine(targetValue));
         }
@@ -45,15 +39,15 @@ public class PlayerHealthBar : MonoBehaviour
 
     private IEnumerator ChangeHealthCoroutine(float targetValue)
     {
-        isActive = true;
+        _isActive = true;
 
-        while (Mathf.Abs(CurrentHealth - targetValue) > 0)
+        while (Mathf.Abs(_healthBar.value - targetValue) > 0)
         {
-            _healthBar.value = Mathf.MoveTowards(CurrentHealth, targetValue, 0.1f);
+            _healthBar.value = Mathf.MoveTowards(_healthBar.value, targetValue, 0.1f);
 
             yield return null;
         }
-
-        isActive = false;
+        
+        _isActive = false;
     }
 }

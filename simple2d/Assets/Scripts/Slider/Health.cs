@@ -6,45 +6,34 @@ using UnityEngine.UI;
 
 public class Health : MonoBehaviour
 {
+    [SerializeField] private float _minHealth = 0;
+    [SerializeField] private float _maxHealth = 100;
     [SerializeField] private float _healthStep = 10;
-    [SerializeField] private PlayerHealthBar _healthBar;
+
+    public float MinHealth { get { return _minHealth; } }
+    public float MaxHealth { get { return _maxHealth; } }
+    public float CurrentHealth { get { return _currentHealth; } }
 
     public event UnityAction<float> HealthChanged;
 
     private float _targetHealth;
     private float _currentHealth;
-    private float _maxValue;
-    private float _minValue;
-    private Slider _slider;
-
-    private void Start()
-    {
-        _slider = _healthBar.GetComponent<Slider>();
-        _maxValue = _slider.maxValue;
-        _minValue = _slider.minValue;
-    }
-
+    
     public void Heal()
     {
-        _currentHealth = _healthBar.CurrentHealth;
+        _targetHealth = Mathf.Clamp(_currentHealth + _healthStep, _minHealth, _maxHealth);
+        
+        HealthChanged?.Invoke(_targetHealth);
 
-        if (_currentHealth + _healthStep <= _maxValue)
-        {
-            _targetHealth = _currentHealth + _healthStep;
-
-            HealthChanged?.Invoke(_targetHealth);
-        }
+        _currentHealth = _targetHealth;
     }
 
     public void Damage()
     {
-        _currentHealth = _healthBar.CurrentHealth;
+        _targetHealth = Mathf.Clamp(_currentHealth - _healthStep, _minHealth, _maxHealth);
         
-        if (_currentHealth - _healthStep >= _minValue)
-        {
-            _targetHealth = _currentHealth - _healthStep;
-
-            HealthChanged?.Invoke(_targetHealth);
-        }
+        HealthChanged?.Invoke(_targetHealth);
+        
+        _currentHealth = _targetHealth;
     }
 }
